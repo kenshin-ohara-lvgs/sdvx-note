@@ -20,4 +20,11 @@ class UserChartMemo extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    // カスタムスコープの定義
+    // TODO: カスタムスコープのメリットが実感的理解できてないので、同様の実装を別の形で行ってメリットを考えてみる
+    public function scopeFetchMainMemo($query, $userId)
+    {
+        return $query->where("user_id", $userId)->whereNull("bar_number");
+    }
 }

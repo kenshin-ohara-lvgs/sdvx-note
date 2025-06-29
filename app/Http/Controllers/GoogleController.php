@@ -24,6 +24,6 @@ class GoogleController extends Controller
 
         Auth::login($user);
 
-        return redirect('/dashboard'); // ログイン後の遷移先
+        return redirect('/charts'); // ログイン後の遷移先
     }
 }

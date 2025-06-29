@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ChartController;
 use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\UserChartMemoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +20,12 @@ use App\Http\Controllers\GoogleController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/charts', [ChartController::class, 'index'])->name('charts.index');
+Route::get('/charts/{chart}', [ChartController::class, 'show'])->name('charts.show');
+
+Route::post('/memos', [UserChartMemoController::class, 'store'])->name('memos.store');
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,5 +26,10 @@ class Chart extends Model
     public function memos(): HasMany
     {
         return $this->hasMany(UserChartMemo::class);
+    }
+
+    public function getMainMemosForUser($userId): Collection
+    {
+        return $this->memos()->fetchMainMemo($userId)->get();
     }
 }
