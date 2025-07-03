@@ -23,4 +23,19 @@ class UserChartMemoController extends Controller
 
         return back()->with("status", "メモを投稿しました");
     }
+
+    public function update(Request $request, UserChartMemo $memo)
+    {
+        // TODO: 編集権限を設定できるように
+        // $this->authorize("update", $memo); //オプショナル。調べたい、、
+
+        $request->validate([
+            "memo" => ["required", "string", "max:10000"],
+        ]);
+
+        $memo->memo = $request->input("memo");
+        $memo->save();
+
+        return redirect()->back()->with("success", "メモを更新しました");
+    }
 }

@@ -29,7 +29,7 @@
     </style>
 </head>
 <body>
-
+    <a href = "/charts">譜面一覧にもどる</a>
     <h1>{{ $chart->song->name }} - {{ $chart->difficulty }} / Lv{{ $chart->level }}</h1>
 
     <p><strong>BPM:</strong> {{ $chart->bpm ?? '不明' }}</p>
@@ -42,20 +42,43 @@
         <!-- ここの取得処理を、bar_numberがnullのものを取得するように変える -->
         @if ($mainMemo->isEmpty())
             <p>この譜面にはまだメモがありません。</p>
+            <form action="{{ route('memos.store') }}" method="POST" style="margin-top: 1rem;">
+                @csrf
+                <textarea name="memo" rows="3" cols="50" placeholder="メモを入力してください..."></textarea><br>
+                <input type="hidden" name="chart_id" value="{{ $chart->id }}">
+                <button type="submit">メモを投稿</button>
+            </form>
         @else
-            <!-- getでcollection取得してしまってるので単一取得 -->
-            <p>
-                {{ $mainMemo[0]->memo }}
-            </p>
+            <!-- TODO: getでcollection取得してしまってるので単一取得 -->
+            <div id="mainMemoDisplay">
+                <p class="whitespace-pre-wrap">{{ $mainMemo[0]->memo }}</p>
+                <button onclick="toggleMainMemoEdit(true)" class="mt-2 text-blue-600 underline">編集</button>
+            </div>
+
+            <form id="mainMemoEdit" action="{{ route('memos.update', $mainMemo[0]->id) }}" method="POST" style="margin-top: 1rem; display: none;">
+                @csrf
+                @method('PUT')
+                <textarea name="memo" rows="3" cols="50">{{ old('memo', $mainMemo[0]->memo) }}</textarea><br>
+                <button type="submit">保存</button>
+                <button type="button" onclick="toggleMainMemoEdit(false)">キャンセル</button>
+            </form>
+
+            <script>
+                function toggleMainMemoEdit(showEdit) {
+                    const display = document.getElementById('mainMemoDisplay');
+                    const editForm = document.getElementById('mainMemoEdit');
+                    if (showEdit) {
+                        display.style.display = 'none';
+                        editForm.style.display = 'block';
+                    } else {
+                        display.style.display = 'block';
+                        editForm.style.display = 'none';
+                    }
+                }
+            </script>
         @endif
 
-        <!-- TODO: edit機能に変更する -->
-        <form action="{{ route('memos.store') }}" method="POST" style="margin-top: 1rem;">
-            @csrf
-            <textarea name="memo" rows="3" cols="50" placeholder="メモを入力してください..."></textarea><br>
-            <input type="hidden" name="chart_id" value="{{ $chart->id }}">
-            <button type="submit">メモを投稿</button>
-        </form>
+
 
 
         <h2>譜面メモ（小節別）</h2>

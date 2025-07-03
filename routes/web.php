@@ -24,8 +24,9 @@ Route::get('/', function () {
 Route::get('/charts', [ChartController::class, 'index'])->name('charts.index');
 Route::get('/charts/{chart}', [ChartController::class, 'show'])->name('charts.show');
 
+// TODO: Routeの後に来ているやつの理解と、storeとかupdateとかの理解（あとnameのとこも）
 Route::post('/memos', [UserChartMemoController::class, 'store'])->name('memos.store');
-
+Route::put('/memos/{memo}', [UserChartMemoController::class, 'update'])->name('memos.update');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
